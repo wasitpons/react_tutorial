@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Row, Button } from 'reactstrap';
 import { map } from 'lodash';
-import { Fetch } from 'react-data-fetching';
+import { Fetch, requestToApi } from 'react-data-fetching';
 import Box from './components/Box';
 import whitePlayerLogo from './images/whitePlayer.png';
 import blackPlayerLogo from './images/blackPlayer.svg';
@@ -19,6 +19,7 @@ class GameStartPage extends Component {
     }
   }
 
+  
   renderContent = ({ error, data }) => {
     console.log(data);
     //return error ? (<h1>error</h1>) : '';
@@ -53,6 +54,16 @@ class GameStartPage extends Component {
     }))
   }
   
+  async postData() {
+    console.log('postData');
+    const apiResponse = await requestToApi({
+      url: 'http://localhost:3003/posts',
+      method: 'GET',
+    }).catch( err => console.log(err));
+    
+    console.log(apiResponse);
+  }
+
   renderPlayerStatus = () => (
     <Row>
       <Col md={{ size: 2, offset: 1 }}>
@@ -95,6 +106,7 @@ class GameStartPage extends Component {
           map(this.props.userData, data => <h1 key={data.name}>{data.name}</h1>)
         }
         <Box title={this.state.randomValue} />
+        <button onClick={this.postData} type="submit">Submit</button>
       </div>
     );
   }
