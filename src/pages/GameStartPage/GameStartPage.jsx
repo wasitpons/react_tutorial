@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Col, Row, Button } from 'reactstrap';
+import { map } from 'lodash';
+import { Fetch } from 'react-data-fetching';
+import Box from './components/Box';
 import whitePlayerLogo from './images/whitePlayer.png';
 import blackPlayerLogo from './images/blackPlayer.svg';
 import './GameStartPage.css';
@@ -16,6 +19,10 @@ class GameStartPage extends Component {
     }
   }
 
+  renderContent = ({ error, data }) => {
+    console.log(data);
+    //return error ? (<h1>error</h1>) : '';
+  }
   randomNumber = () => (
     Math.ceil(Math.random() * 100) % 10
   );
@@ -78,14 +85,53 @@ class GameStartPage extends Component {
   );
 
   render() {
+    console.log(this.props);
     return (
       <div>
         {this.renderPlayerStatus()}
         {this.renderRandomNumberBox()}
         {this.renderButton()}
+        {
+          map(this.props.userData, data => <h1 key={data.name}>{data.name}</h1>)
+        }
+        <Box title={this.state.randomValue} />
       </div>
     );
   }
 }
 
-export default GameStartPage;
+// map
+/*
+  map( data, function)
+*/
+const queryUser = WrappedComponent => props => (
+  <Fetch 
+    url="https://jsonplaceholder.typicode.com/users"
+    loader={() => <h1>Loading...</h1>}
+  >
+    {
+      ({ data }) => (
+        <WrappedComponent
+          {...props}
+          userData={data}
+        />
+      )
+    }
+  </Fetch>
+)
+
+// props
+/*
+    [
+      title : {},
+      postfix : {},
+    ]
+*/
+
+// ...props
+/*
+    title : {},
+    postfix : {}
+*/
+
+export default queryUser(GameStartPage);
