@@ -112,10 +112,6 @@ class GameStartPage extends Component {
   }
 }
 
-// map
-/*
-  map( data, function)
-*/
 const queryUser = WrappedComponent => props => (
   <Fetch 
     url="https://jsonplaceholder.typicode.com/users"
